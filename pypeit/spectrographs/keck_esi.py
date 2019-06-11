@@ -28,8 +28,8 @@ class KeckESISpectrograph(spectrograph.Spectrograph):
         self.detector = [
                 # Detector 1
                 pypeitpar.DetectorPar(
-                            specaxis        = 1,
-                            specflip        = True,
+                            specaxis        = 0,
+                            specflip        = False,
                             xgap            = 0.,
                             ygap            = 0.,
                             ysize           = 1.,
@@ -43,7 +43,7 @@ class KeckESISpectrograph(spectrograph.Spectrograph):
                             datasec         = ['[:,25:1048]', '[:,1049:2072]'],
                             oscansec        = ['[:,2075:2149]', '[:,2155:2229]'],
                             )]
-        self.norders = 5
+        self.norders = 10
         # Uses default timeunit
         # Uses default primary_hdrext
         # self.sky_file = ?
@@ -126,7 +126,7 @@ class KeckESISpectrograph(spectrograph.Spectrograph):
         meta['exptime'] = dict(ext=0, card='ELAPTIME')
         meta['airmass'] = dict(ext=0, card='AIRMASS')
         # Extras for config and frametyping
-        meta['dispname'] = dict(ext=0, card='INSTR')
+        meta['dispname'] = dict(ext=0, card='INSTRUME')
         meta['idname'] = dict(ext=0, card='OBSTYPE')
 
         # Ingest
