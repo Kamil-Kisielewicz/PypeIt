@@ -40,7 +40,7 @@ class KeckNIRESSpectrograph(spectrograph.Spectrograph):
                             gain            = 3.8,
                             ronoise         = 5.0,
                             datasec         = '[:,:]',
-                            oscansec        = '[980:1024,:]'  # Is this a hack??
+                            oscansec        = ''
                             )]
         self.norders = 5
         # Uses default timeunit
@@ -154,6 +154,8 @@ class KeckNIRESSpectrograph(spectrograph.Spectrograph):
         if ftype in ['pinhole', 'bias']:
             # No pinhole or bias frames
             return np.zeros(len(fitstbl), dtype=bool)
+        if ftype in ['dark']:
+            return fitstbl['idname'] == 'dark'
         if ftype in ['pixelflat', 'trace']:
             return fitstbl['idname'] == 'domeflat'
         

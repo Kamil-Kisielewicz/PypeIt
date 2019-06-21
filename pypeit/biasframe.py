@@ -158,6 +158,6 @@ class BiasFrame(calibrationimage.CalibrationImage, masterframe.MasterFrame):
             msgs.error("useframe=overscan was Deprecated. Remove from your pypeit file")
 
         # 3) User wants bias subtractions, use a Master biasframe?
-        if self.par['useframe'] in ['bias', 'dark']:
+        if self.par['useframe'] in ['bias',]:
             return super(BiasFrame, self).load('BIAS', ifile=ifile, return_header=return_header)
 
