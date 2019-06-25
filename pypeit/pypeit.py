@@ -607,26 +607,33 @@ class PypeIt(object):
         # If there are objects, do 2nd round of global_skysub, local_skysub_extract, flexure, geo_motion
         if self.nobj > 0:
             if self.par['scienceimage']['boxcar_only']:  # ONLY FOR ECHELLE + NEAR-IR SO FAR!
-                # Quick loop over the objects
+                # Quick loop over the objects, extracting only the positive ones
                 from pypeit.core import pixels, extract
                 slitmask = pixels.tslits2mask(self.caliBrate.tslits_dict)
-                for iord in range(self.nobj):
-                    thisobj = (self.sobjs_obj.ech_orderindx == iord) & (self.sobjs_obj.ech_objid > 0)# pos indices of objects for this slit
-                    thismask = (slitmask == iord) # pixels for this slit
-                    # True  = Good, False = Bad for inmask
-                    inmask = (self.sciImg.mask == 0) & thismask
-                    # Do it
-                    sobj = self.sobjs_obj[np.where(thisobj)[0][0]]
-                    plate_scale = self.spectrograph.order_platescale(sobj.ech_order, binning=self.binning)[0]
-                    extract.extract_specobj_boxcar(self.sciImg.image, self.sciImg.ivar, inmask,
-                                                   self.caliBrate.mswave, self.initial_sky, self.sciImg.rn2img,
-                                                   self.par['scienceimage']['boxcar_radius']/plate_scale, sobj)
-                    self.sobjs = self.sobjs_obj
-                    # Fill me up -- Should sync with the nobj=0 case  -- Could just set this as the DEFAULTS before optimal
-                    self.skymodel = self.initial_sky
-                    self.objmodel = np.zeros_like(self.sciImg.image)
-                    self.ivarmodel = np.copy(self.sciImg.ivar)
-                    self.outmask = self.sciImg.mask
+                uniobj = np.unique(self.sobjs_obj.ech_objid)
+                # Loop on objects
+                for iiobj in uniobj:
+                    if iiobj < 0:
+                        continue
+                    # Loop on order
+                    allordr = np.where(self.sobjs_obj.ech_objid == iiobj)[0]
+                    for thisobj in allordr:
+                        iord = self.sobjs_obj.ech_orderindx[thisobj]
+                        thismask = (slitmask == iord) # pixels for this slit
+                        # True  = Good, False = Bad for inmask
+                        inmask = (self.sciImg.mask == 0) & thismask
+                        # Do it
+                        sobj = self.sobjs_obj[thisobj] #np.where(thisobj)[0][0]]
+                        plate_scale = self.spectrograph.order_platescale(sobj.ech_order, binning=self.binning)[0]
+                        extract.extract_specobj_boxcar(self.sciImg.image, self.sciImg.ivar, inmask,
+                                                       self.caliBrate.mswave, self.initial_sky, self.sciImg.rn2img,
+                                                       self.par['scienceimage']['boxcar_radius']/plate_scale, sobj)
+                self.sobjs = self.sobjs_obj
+                # Fill me up -- Should sync with the nobj=0 case  -- Could just set this as the DEFAULTS before optimal
+                self.skymodel = self.initial_sky
+                self.objmodel = np.zeros_like(self.sciImg.image)
+                self.ivarmodel = np.copy(self.sciImg.ivar)
+                self.outmask = self.sciImg.mask
             else:
                 # Global sky subtraction second pass. Uses skymask from object finding
                 self.global_sky = self.initial_sky if self.std_redux else \
