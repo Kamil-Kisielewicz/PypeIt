@@ -297,9 +297,13 @@ def load_1dspec(fname, exten=None, extract='OPT', objname=None, flux=False):
     # Load
     try:
         spec = XSpectrum1D.from_file(fname, exten=exten, **rsp_kwargs)
-    except ValueError:
+    except (ValueError, AttributeError):
         rsp_kwargs['wave_tag'] = '{:s}_WAVE'.format(extract)
-        spec = XSpectrum1D.from_file(fname, exten=exten, **rsp_kwargs)
+        try:
+            spec = XSpectrum1D.from_file(fname, exten=exten, **rsp_kwargs)
+        except AttributeError:
+            msgs.warn("Your attempt to load the 1D spectrum failed.")
+            msgs.error("You may need to change your EXTRACT option, e.g. to extract=BOX")
 
     # Return
     return spec

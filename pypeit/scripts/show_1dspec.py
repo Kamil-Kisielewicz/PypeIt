@@ -25,7 +25,7 @@ def main(args, unit_test=False):
     """
 
     import sys
-    import pdb
+    from IPython import embed
 
     from astropy.io import fits
     from PyQt5.QtWidgets import QApplication
