@@ -66,4 +66,5 @@ Output
 If all goes smoothly, the code will generate four spectral
 output files, with 2 each with extensions of spec1d and
 spec2d.  These can be viewed with :ref:`pypeit-1dspec`
-and :ref:`pypeit-2dspec`.
+and :ref:`pypeit-2dspec`.  For the 1D spectra, because the
+output is only boxcar, you need to use the --extract=BOX option.
