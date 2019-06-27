@@ -1696,7 +1696,7 @@ class ScienceImagePar(ParSet):
     def __init__(self, bspline_spacing=None, boxcar_radius=None, trace_npoly=None,
                  global_sky_std=None, sig_thresh=None, maxnumber=None, sn_gauss=None,
                  model_full_slit=None, no_poly=None, manual=None, sky_sigrej=None,
-                 boxcar_only=None, skip_second_find=None):
+                 boxcar_only=None, skip_second_find=None, std_prof_nsigma=None):
 
         # Grab the parameter names and values from the function
         # arguments
@@ -1740,7 +1740,10 @@ class ScienceImagePar(ParSet):
         dtypes['trace_npoly'] = int
         descr['trace_npoly'] = 'Order of legendre polynomial fits to object traces.'
 
-        defaults['global_sky_std'] = True
+        defaults['std_prof_nsigma'] = 30.
+        dtypes['std_prof_nsigma'] = float
+        descr['std_prof_nsigma'] = 'prof_nsigma parameter for Standard star extraction.  Prevents undesired rejection.'
+
         dtypes['global_sky_std'] = bool
         descr['global_sky_std'] = 'Global sky subtraction will be performed on standard stars. This should be turned' \
                                   'off for example for near-IR reductions with narrow slits, since bright standards can' \
@@ -1759,6 +1762,10 @@ class ScienceImagePar(ParSet):
         dtypes['maxnumber'] = int
         descr['maxnumber'] = 'Maximum number of objects to extract in a science frame.  Use ' \
                              'None for no limit.'
+
+        defaults['find_trim_edge'] = [5,5]
+        dtypes['find_trim_edge'] = list
+        descr['find_trim_edge'] = 'Trim the slit by this number of pixels left/right before finding objects'
 
         defaults['sn_gauss'] = 4.0
         dtypes['sn_gauss'] = [int, float]
@@ -1794,6 +1801,7 @@ class ScienceImagePar(ParSet):
         #ToDO change to updated param list
         parkeys = ['bspline_spacing', 'boxcar_radius', 'trace_npoly', 'global_sky_std',
                    'sig_thresh', 'maxnumber', 'sn_gauss', 'model_full_slit', 'no_poly', 'manual',
+                   'find_trim_edge', 'std_prof_nsigma',
                    'sky_sigrej', 'skip_second_find', 'boxcar_only']
         kwargs = {}
         for pk in parkeys:
