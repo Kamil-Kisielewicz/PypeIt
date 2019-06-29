@@ -1696,6 +1696,7 @@ class ScienceImagePar(ParSet):
     def __init__(self, bspline_spacing=None, boxcar_radius=None, trace_npoly=None,
                  global_sky_std=None, sig_thresh=None, maxnumber=None, sn_gauss=None,
                  model_full_slit=None, no_poly=None, manual=None, sky_sigrej=None,
+                 find_trim_edge=None,
                  boxcar_only=None, skip_second_find=None, std_prof_nsigma=None):
 
         # Grab the parameter names and values from the function

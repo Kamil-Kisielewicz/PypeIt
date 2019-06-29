@@ -53,7 +53,7 @@ class KeckNIRESSpectrograph(spectrograph.Spectrograph):
 
     def default_pypeit_par(self):
         """
-        Set default parameters for Shane Kast Blue reductions.
+        Set default parameters for Keck NIRES
         """
         par = pypeitpar.PypeItPar()
         par['rdx']['spectrograph'] = 'keck_nires'
