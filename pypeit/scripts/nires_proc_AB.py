@@ -63,9 +63,9 @@ def main(pargs):
     cfg_lines += ['[calibrations]']
     cfg_lines += ['    caldir = {0}'.format(master_dir)]
     # Skip CR
-    cfg_lines += ['    [[scienceframe]]']
-    cfg_lines += ['        [[process]]']
-    cfg_lines += ['              cr_reject = False']
+    cfg_lines += ['[scienceframe]']
+    cfg_lines += ['    [[process]]']
+    cfg_lines += ['         cr_reject = False']
     cfg_lines += ['[scienceimage]']
     cfg_lines += ['    boxcar_only = True']
     cfg_lines += ['    skip_second_find = True']

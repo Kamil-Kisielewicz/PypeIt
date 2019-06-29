@@ -592,9 +592,12 @@ class PypeIt(object):
                                     manual_extract_dict=manual_extract_dict)
 
         # Global sky subtraction, first pass. Uses skymask from object finding step above
+        msgs.info("Starting global sky subtraction")
         self.initial_sky = \
             self.redux.global_skysub(skymask=skymask_init,
-                                    std=self.std_redux, maskslits=self.maskslits, show=self.show)
+                                    std=self.std_redux, maskslits=self.maskslits,
+                                    show=self.show,
+                                    update_crmask=self.par['scienceframe']['process']['cr_reject'])
 
         # Second pass of object finding
         if (not self.std_redux) and (not self.par['scienceimage']['skip_second_find']):
@@ -608,6 +611,7 @@ class PypeIt(object):
         if self.nobj > 0:
             if self.par['scienceimage']['boxcar_only']:  # ONLY FOR ECHELLE + NEAR-IR SO FAR!
                 # Quick loop over the objects, extracting only the positive ones
+                msgs.info("Boxcar only extraction")
                 from pypeit.core import pixels, extract
                 slitmask = pixels.tslits2mask(self.caliBrate.tslits_dict)
                 uniobj = np.unique(self.sobjs_obj.ech_objid)
